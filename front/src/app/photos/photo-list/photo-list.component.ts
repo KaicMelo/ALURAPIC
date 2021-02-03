@@ -1,17 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { Photo } from '../photo/photo';
-import { PhotoService } from '../photo/photo.service';
+import { PhotoService } from '../photo/photo.services';
 
 @Component({
-  selector: 'app-photo-list',
+  selector: 'ap-photo-list',
   templateUrl: './photo-list.component.html',
   styleUrls: ['./photo-list.component.css']
 })
 export class PhotoListComponent implements OnInit {
 
-  photos: Photo[] = [];
+  photos: Object[] = [];
   filter: string = '';
   hasMore: boolean = true;
   currentPage: number = 1;
@@ -24,8 +22,10 @@ export class PhotoListComponent implements OnInit {
 
   ngOnInit(): void {
     this.userName = this.activatedRoute.snapshot.params.userName;
-    this.photos = this.activatedRoute.snapshot.data['photos'];
+    this.photos = this.activatedRoute.snapshot.data.photos;
   }
+
+
 
   load() {
     this.photoService
