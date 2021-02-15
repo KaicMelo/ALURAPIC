@@ -12,6 +12,7 @@ export class SiginInComponent implements OnInit{
   constructor(private formBuilder: FormBuilder){}
 
   ngOnInit(): void {
+    
    this.loginForm = this.formBuilder.group({
       userName: ['', Validators.required],
       password: ['', Validators.required]
