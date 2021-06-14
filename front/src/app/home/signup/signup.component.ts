@@ -1,30 +1,30 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
-import { PlatformDetectionService } from "src/app/core/platform-detector/platform-detector.service";
-import { lowerCaseValidator } from "src/app/shared/validator/lower-case.validator";
-import { NewUser } from "./new-user";
-import { SignUpService } from "./signup.service";
-import { UserNotTakenService } from "./user-not-taken.validator.serveice";
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/core/auth/auth.service';
+import { PlatformDetectorService } from 'src/app/core/platform/platform-detector.service';
+import { NewUser } from './NewUser';
+import { SignUpService } from './signup.service';
+import { UserNotTakenValidatorService } from './user-not-taken-validator.service';
+import { userNamePassword } from './username-password.validator';
 
 @Component({
-  templateUrl: './signup.component.html',
-  providers: [UserNotTakenService]
+  templateUrl: './signup.component.html'
 })
-export class SignupComponent implements OnInit {
+export class SignUpComponent implements OnInit {
 
   signupForm: FormGroup;
-  @ViewChild('inputEmail') inputEmail:ElementRef<HTMLInputElement>
+  @ViewChild('emailInput') emailInput: ElementRef<HTMLInputElement>
 
   constructor(
     private formBuilder: FormBuilder,
-    private userNotTakenService: UserNotTakenService,
+    private userNotTakenValidatorService: UserNotTakenValidatorService,
     private signUpService: SignUpService,
     private router: Router,
-    private platformDetectionService: PlatformDetectionService
+    private platformDetectionService: PlatformDetectorService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.signupForm = this.formBuilder.group({
       email: ['',
         [
@@ -32,21 +32,21 @@ export class SignupComponent implements OnInit {
           Validators.email
         ]
       ],
-      userName: ['',
-        [
-          Validators.required,
-          lowerCaseValidator,
-          Validators.minLength(2),
-          Validators.maxLength(40)
-        ],
-        this.userNotTakenService.checkUserNameTaken()
-      ],
       fullName: ['',
         [
           Validators.required,
           Validators.minLength(2),
-          Validators.maxLength(30)
+          Validators.maxLength(40)
         ]
+      ],
+      userName: ['',
+        [
+          Validators.required,
+          Validators.pattern(/^[a-z0-9_\-]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(30)
+        ],
+        this.userNotTakenValidatorService.checkUserNameTaken()
       ],
       password: ['',
         [
@@ -55,15 +55,23 @@ export class SignupComponent implements OnInit {
           Validators.maxLength(14)
         ]
       ]
-    })
-    // this.platformDetectionService.isPlatformBrowser() && this.inputEmail.nativeElement.focus();
+    },{
+      validator:userNamePassword
+    });
+    await this.platformDetectionService.isPlatformBrowser() &&
+      this.emailInput.nativeElement.focus();
   }
 
   signup() {
-    const newUser = this.signupForm.getRawValue() as NewUser;
-    this.signUpService.signup(newUser).subscribe(()=>
-      this.router.navigate(['']),
-      err=>console.log(err)
-    )
+    if (this.signupForm.valid && !this.signupForm.pending) {
+      const newUser = this.signupForm.getRawValue() as NewUser;
+      this.signUpService
+        .signup(newUser)
+        .subscribe(
+          () => this.router.navigate(['']),
+          err => console.log(err)
+        );
+    }
   }
+
 }

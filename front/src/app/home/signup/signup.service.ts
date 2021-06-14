@@ -1,19 +1,19 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { NewUser } from "./new-user";
-import { environment } from '../../../environments/environment'
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { NewUser } from './NewUser';
 
 const API = environment.ApiUrl;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class SignUpService {
   constructor(private http: HttpClient) { }
 
-  checkUserNametTaken(userName: string) {
-    return this.http.get(API + '/user/exists/' + userName)
+  checkUserNameTaken(userName: string) {
+    return this.http.get(`${API}/user/exists/${userName}`);
   }
 
   signup(newUser: NewUser) {
-    return this.http.post(API + '/user/signup', newUser)
+    return this.http.post(`${API}/user/signup`,newUser);
   }
 }

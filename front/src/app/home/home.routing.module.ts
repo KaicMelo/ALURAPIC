@@ -1,9 +1,9 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { LoginGuard } from "../core/auth/login.guard";
-import { HomeComponent } from "./home.component";
-import { SiginInComponent } from "./signin/signin.component";
-import { SignupComponent } from "./signup/signup.component";
+import { RouterModule, Routes } from '@angular/router'
+import { NgModule } from '@angular/core';
+import { HomeComponent } from './home.component';
+import { LoginGuard } from '../core/auth/login.guard';
+import { SignInComponent } from './signin/signin.component';
+import { SignUpComponent } from './signup/signup.component';
 
 const routes: Routes = [
   {
@@ -13,19 +13,27 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: SiginInComponent,
+        component: SignInComponent,
+        data:{
+          title:'Sign in'
+        }
       },
       {
         path: 'signup',
-        component: SignupComponent,
-      }
+        component: SignUpComponent,
+        data:{
+          title:'Sign up'
+        }
+      },
     ]
-  }
-];
+  },
+
+]
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [
+    RouterModule.forChild(routes)
+  ],
   exports: [RouterModule]
 })
-
 export class HomeRoutingModule { }

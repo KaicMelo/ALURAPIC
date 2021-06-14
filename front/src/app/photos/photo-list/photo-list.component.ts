@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PhotoService } from '../photo/photo.services';
+import { PhotoService } from '../photo/photo.service';
 
 @Component({
   selector: 'ap-photo-list',

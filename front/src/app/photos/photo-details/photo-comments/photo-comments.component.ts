@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { switchMap, tap } from 'rxjs/operators';
 import { PhotoComment } from "../../photo/photo-comment";
-import { PhotoService } from "../../photo/photo.services";
+import { PhotoService } from '../../photo/photo.service';
 
 @Component({
   selector: 'ap-photo-comments',
